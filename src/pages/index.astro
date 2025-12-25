@@ -1,0 +1,248 @@
+---
+const title = "José Alonso";
+
+import projects from "../data/projects.json";
+import Nav from "../components/Nav.astro";
+
+projects.sort((a, b) => (b.year ?? 0) - (a.year ?? 0));
+
+// Navbar fija
+const NAV_MODE = "fixed";
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>{title} — Portafolio</title>
+    <meta
+      name="description"
+      content="Portafolio personal minimalista. Proyectos y aprendizaje."
+    />
+
+    <!-- Canonical (GitHub Pages) -->
+    <link rel="canonical" href="https://jamrz.github.io/portfolio/" />
+
+    <!-- Fuente pixel para títulos -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=VT323&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Cloudflare Web Analytics -->
+    <script
+      defer
+      src="https://static.cloudflareinsights.com/beacon.min.js"
+      data-cf-beacon='{"token": "7badbff71e284141aa36b09b79c8402f"}'>
+    </script>
+    <!-- End Cloudflare Web Analytics -->
+  </head>
+
+  <body id="top">
+    <!-- NAVBAR -->
+    <Nav brand="José Alonso" projectsCount={projects.length} mode={NAV_MODE} />
+
+    <!-- ESPACIADOR para que la nav fija NO tape el contenido -->
+    <div class="nav-spacer" aria-hidden="true"></div>
+
+    <main class="wrap">
+      <h1>José Alonso</h1>
+      <p>Aprendiendo programación. Villahermosa, Tabasco.</p>
+
+      <hr />
+
+      <section id="sobre">
+        <h2>Sobre mí</h2>
+        <p>
+          Ingeniero de formación. Aprendo programación de manera autodidacta,
+          creando cosas simples, funcionales y fáciles de entender.
+          Este portafolio documenta ese proceso.
+        </p>
+      </section>
+
+      <hr />
+
+      <section id="proyectos">
+        <h2>Proyectos</h2>
+
+        <div class="cards">
+          {projects.map((p) => (
+            <article class="card">
+              <header class="card-head">
+                <strong class="card-title">{p.title}</strong>
+                {p.year ? <span class="card-year">{p.year}</span> : null}
+              </header>
+
+              <p class="card-desc">{p.desc}</p>
+
+              {p.tags?.length ? (
+                <p class="tags">
+                  {p.tags.map((t) => (
+                    <span class="tag">#{t}</span>
+                  ))}
+                </p>
+              ) : null}
+
+              <footer class="card-foot">
+                {p.url && p.url !== "#" ? (
+                  <a href={p.url} target="_blank" rel="noreferrer">ver</a>
+                ) : null}
+              </footer>
+            </article>
+          ))}
+        </div>
+
+        <p class="note">(Los proyectos se agregan desde un JSON.)</p>
+      </section>
+
+      <hr />
+
+      <section id="contacto">
+        <h2>Contacto</h2>
+        <p>
+          Linkedin: <a href="https://www.linkedin.com/in/joseamtzreyes/">linkedin.com/joseamtzreyes/</a><br />
+          GitHub: <a href="https://github.com/JAMRz">github.com/JAMRz</a>
+        </p>
+      </section>
+    </main>
+
+    <style>
+      :global(body) {
+        margin: 0;
+        background: #ffffff;
+        color: #000000;
+        font-family: Georgia, "Times New Roman", Times, serif;
+        font-size: 16px;
+        line-height: 1.65;
+      }
+
+      /* Ajuste de navbar es más alta/baja */
+      :global(:root) {
+        --nav-h: 56px;
+      }
+
+      /* Reserva espacio para la navbar fija */
+      .nav-spacer {
+        height: var(--nav-h);
+      }
+
+      .wrap {
+        max-width: 720px;
+        margin: 0 auto;
+        padding: 24px 16px 96px;
+      }
+
+      h1,
+      h2 {
+        font-family: "VT323", monospace;
+        font-weight: 400;
+        letter-spacing: 0.5px;
+      }
+
+      h1 {
+        font-size: 34px;
+        margin: 0 0 8px;
+      }
+
+      h2 {
+        font-size: 24px;
+        margin: 0 0 8px;
+      }
+
+      p {
+        margin: 0 0 12px;
+      }
+
+      .note {
+        font-size: 14px;
+        margin-top: 12px;
+      }
+
+      hr {
+        border: 0;
+        border-top: 1px solid #000;
+        margin: 28px 0;
+      }
+
+      a {
+        color: #000;
+        text-decoration: underline;
+      }
+
+      a:hover {
+        text-decoration-thickness: 2px;
+      }
+
+      /* Offset para anchors (#sobre, #proyectos, etc.) */
+      :global(html) {
+        scroll-padding-top: calc(var(--nav-h) + 16px);
+      }
+
+      /* Cards */
+      .cards {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 12px;
+        margin: 0 0 12px;
+      }
+
+      /* 2 en 2 */
+      @media (min-width: 640px) {
+        .cards {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+
+      .card {
+        border: 1px solid #000;
+        padding: 12px 12px 10px;
+        background: #fff;
+      }
+
+      .card-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        gap: 10px;
+        margin: 0 0 6px;
+      }
+
+      .card-title {
+        font-weight: 700;
+      }
+
+      .card-year {
+        font-size: 14px;
+        opacity: 0.8;
+        white-space: nowrap;
+      }
+
+      .card-desc {
+        margin: 0 0 10px;
+      }
+
+      .card-foot {
+        font-size: 14px;
+        margin-top: 10px;
+      }
+
+      /* Tags */
+      .tags {
+        margin: 0;
+        font-size: 14px;
+      }
+
+      .tag {
+        display: inline-block;
+        margin: 0 8px 6px 0;
+        border: 1px solid #000;
+        padding: 1px 6px;
+        white-space: nowrap;
+      }
+    </style>
+  </body>
+</html>
